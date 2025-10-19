@@ -1,0 +1,23 @@
+# Node/TypeScript basics
+node_modules/
+dist/
+
+# Env and local config
+.env
+.env.*
+.env.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Swagger generated file
+src/swagger/swagger.json
