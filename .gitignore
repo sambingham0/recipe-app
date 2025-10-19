@@ -18,6 +18,3 @@ logs/
 .DS_Store
 Thumbs.db
 .vscode/
-
-# Swagger generated file
-src/swagger/swagger.json
