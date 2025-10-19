@@ -50,3 +50,57 @@ GET http://localhost:3000/recipes/
 ### Delete a recipe by ID
 DELETE http://localhost:3000/recipes/68f42b30b2ea4349e573363b
 
+### ---- Render deployment: https://recipe-app-mzwf.onrender.com/ ----
+
+### Get all recipes (Render)
+GET https://recipe-app-mzwf.onrender.com/recipes
+
+### Create a new recipe (Render)
+POST https://recipe-app-mzwf.onrender.com/recipes
+Content-Type: application/json
+
+{
+	"title": "Chocolate Cake",
+	"description": "Rich and moist",
+	"ingredients": [
+		"2 cups flour",
+		"1 cup sugar",
+		"1 cup cocoa powder"
+	],
+	"instructions": [
+		"Mix ingredients",
+		"Bake 30 minutes"
+	],
+	"prepTime": 15,
+	"cookTime": 30,
+	"difficulty": "Medium"
+}
+
+### Update a recipe by ID (Render)
+PUT https://recipe-app-mzwf.onrender.com/recipes/68f42dea9e1c3976fe48428d
+Content-Type: application/json
+
+{
+	"title": "Updated Chocolate Cake",
+	"description": "Even richer and moister",
+	"ingredients": [
+		"2 cups flour",
+		"1 cup sugar",
+		"1 cup cocoa powder",
+		"2 eggs"
+	],
+	"instructions": [
+		"Mix ingredients",
+		"Bake 35 minutes"
+	],
+	"prepTime": 20,
+	"cookTime": 35,
+	"difficulty": "Easy"
+}
+
+### Get a recipe by ID (Render)
+GET https://recipe-app-mzwf.onrender.com/recipes/
+
+### Delete a recipe by ID (Render)
+DELETE https://recipe-app-mzwf.onrender.com/recipes/68f439c45d0531daf944bbfc
+
