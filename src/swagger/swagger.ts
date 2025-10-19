@@ -7,7 +7,8 @@ const doc = {
     description: 'API for CRUD recipes'
   },
   servers: [
-    { url: 'http://localhost:3000', description: 'Local dev' }
+    { url: 'http://localhost:3000', description: 'Local dev' },
+    { url: process.env.SERVER_URL || 'https://recipe-app-mzwf.onrender.com', description: 'Production' }
   ],
   tags: [
     {
