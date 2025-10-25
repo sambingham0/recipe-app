@@ -27,6 +27,12 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 // Routes
 app.use('/recipes', recipeRoutes);
 
+
+//default placeholder
+app.get('/', (_req, res) => {
+  res.send('Recipe API is running successfully!');
+});
+
 // 404 and error handlers
 app.use(notFound);
 app.use(errorHandler);
