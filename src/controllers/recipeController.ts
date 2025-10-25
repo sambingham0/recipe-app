@@ -1,52 +1,33 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Recipe from '../models/recipe';
-import mongoose from 'mongoose';
+import AppError from '../utils/AppError';
 
 // GET all recipes
-export const getAllRecipes = async (req: Request, res: Response) => {
+export const getAllRecipes = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const recipes = await Recipe.find();
     res.json(recipes);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    next(err);
   }
 };
 
 // GET recipe by ID
-export const getRecipeById = async (req: Request, res: Response) => {
+export const getRecipeById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid recipe ID' });
-    }
-
     const recipe = await Recipe.findById(id);
-    if (!recipe) return res.status(404).json({ message: 'Recipe not found' });
-
+    if (!recipe) throw new AppError(404, 'Recipe not found', 'RECIPE_NOT_FOUND');
     res.json(recipe);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    next(err);
   }
 };
 
 // POST new recipe
-export const createRecipe = async (req: Request, res: Response) => {
+export const createRecipe = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { title, description, ingredients, instructions, prepTime, cookTime, difficulty } = req.body;
-
-    // Validation
-    if (
-      !title ||
-      !Array.isArray(ingredients) ||
-      !Array.isArray(instructions) ||
-      typeof prepTime !== 'number' ||
-      typeof cookTime !== 'number' ||
-      !['Easy', 'Medium', 'Hard'].includes(difficulty)
-    ) {
-      return res.status(400).json({ message: 'Invalid or missing fields' });
-    }
 
     const recipe = await Recipe.create({
       title,
@@ -61,32 +42,15 @@ export const createRecipe = async (req: Request, res: Response) => {
 
     res.status(201).json(recipe);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    next(err);
   }
 };
 
 // PUT update recipe
-export const updateRecipe = async (req: Request, res: Response) => {
+export const updateRecipe = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const { title, description, ingredients, instructions, prepTime, cookTime, difficulty } = req.body;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid recipe ID' });
-    }
-
-    // Validation
-    if (
-      !title ||
-      !Array.isArray(ingredients) ||
-      !Array.isArray(instructions) ||
-      typeof prepTime !== 'number' ||
-      typeof cookTime !== 'number' ||
-      !['Easy', 'Medium', 'Hard'].includes(difficulty)
-    ) {
-      return res.status(400).json({ message: 'Invalid or missing fields' });
-    }
 
     const updatedRecipe = await Recipe.findByIdAndUpdate(
       id,
@@ -94,29 +58,22 @@ export const updateRecipe = async (req: Request, res: Response) => {
       { new: true, runValidators: true }
     );
 
-    if (!updatedRecipe) return res.status(404).json({ message: 'Recipe not found' });
+    if (!updatedRecipe) throw new AppError(404, 'Recipe not found', 'RECIPE_NOT_FOUND');
 
     res.json(updatedRecipe);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    next(err);
   }
 };
 
 // DELETE recipe
-export const deleteRecipe = async (req: Request, res: Response) => {
+export const deleteRecipe = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid recipe ID' });
-    }
-
     const deletedRecipe = await Recipe.findByIdAndDelete(id);
-    if (!deletedRecipe) return res.status(404).json({ message: 'Recipe not found' });
-
+    if (!deletedRecipe) throw new AppError(404, 'Recipe not found', 'RECIPE_NOT_FOUND');
     res.json({ message: 'Recipe deleted successfully' });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    next(err);
   }
 };

@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ### Update a recipe by ID
-PUT http://localhost:3000/recipes/68f42dea9e1c3976fe48428d
+PUT http://localhost:3000/recipes/68fd5d192e6c3ca0f69a0441
 Content-Type: application/json
 
 {
@@ -48,7 +48,7 @@ Content-Type: application/json
 GET http://localhost:3000/recipes/
 
 ### Delete a recipe by ID
-DELETE http://localhost:3000/recipes/68f42b30b2ea4349e573363b
+DELETE http://localhost:3000/recipes/68fd5d192e6c3ca0f69a0441
 
 ### ---- Render deployment: https://recipe-app-mzwf.onrender.com/ ----
 

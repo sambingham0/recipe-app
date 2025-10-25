@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { validate } from '../middleware/validate';
+import { recipeBodySchema, recipeIdParamSchema, recipeUpdateBodySchema } from '../validation/recipeSchemas';
 import {
   getAllRecipes,
   getRecipeById,
@@ -20,6 +22,7 @@ router.get(
 
 router.get(
   '/:id',
+  validate({ params: recipeIdParamSchema }),
   /* #swagger.tags = ['Recipes'] */
   /* #swagger.summary = 'Get a recipe by ID' */
   /* #swagger.parameters['id'] = { in: 'path', description: 'Recipe ID', required: true, type: 'string' } */
@@ -32,6 +35,7 @@ router.get(
 
 router.post(
   '/',
+  validate({ body: recipeBodySchema }),
   /* #swagger.tags = ['Recipes'] */
   /* #swagger.summary = 'Create a new recipe' */
   /* #swagger.parameters['body'] = { in: 'body', required: true, schema: { $ref: '#/definitions/RecipeInput' } } */
@@ -52,6 +56,7 @@ router.post(
 
 router.put(
   '/:id',
+  validate({ params: recipeIdParamSchema, body: recipeUpdateBodySchema }),
   /* #swagger.tags = ['Recipes'] */
   /* #swagger.summary = 'Update a recipe by ID' */
   /* #swagger.parameters['id'] = { in: 'path', description: 'Recipe ID', required: true, type: 'string' } */
@@ -74,6 +79,7 @@ router.put(
 
 router.delete(
   '/:id',
+  validate({ params: recipeIdParamSchema }),
   /* #swagger.tags = ['Recipes'] */
   /* #swagger.summary = 'Delete a recipe by ID' */
   /* #swagger.parameters['id'] = { in: 'path', description: 'Recipe ID', required: true, type: 'string' } */

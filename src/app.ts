@@ -5,6 +5,7 @@ import recipeRoutes from './routes/recipeRoutes';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 import swaggerFile from './swagger/swagger.json';
+import { errorHandler, notFound } from './middleware/errorHandler';
 
 dotenv.config();
 
@@ -25,5 +26,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // Routes
 app.use('/recipes', recipeRoutes);
+
+// 404 and error handlers
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
