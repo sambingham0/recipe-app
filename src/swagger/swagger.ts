@@ -16,6 +16,29 @@ const doc = {
       description: 'Recipe CRUD operations'
     }
   ],
+  // Explicit path overrides so generated doc matches runtime behavior
+  paths: {
+    '/recipes/{id}': {
+      put: {
+        tags: ['Recipes'],
+        summary: 'Update a recipe by ID',
+        description: '',
+        parameters: [
+          { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Recipe ID' }
+        ],
+        requestBody: {
+          required: true,
+          content: { 'application/json': { schema: { $ref: '#/components/schemas/RecipeInput' } } }
+        },
+        responses: {
+          '204': { description: 'No Content - recipe updated successfully' },
+          '400': { description: 'Invalid ID or body', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+          '404': { description: 'Not found', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+          '500': { description: 'Server error', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+        }
+      }
+    }
+  },
   // OpenAPI components (schemas)
   components: {
     schemas: {
