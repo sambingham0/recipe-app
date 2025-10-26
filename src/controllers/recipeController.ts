@@ -60,7 +60,7 @@ export const updateRecipe = async (req: Request, res: Response, next: NextFuncti
 
     if (!updatedRecipe) throw new AppError(404, 'Recipe not found', 'RECIPE_NOT_FOUND');
 
-    res.json(updatedRecipe);
+    res.status(204).send();
   } catch (err) {
     next(err);
   }

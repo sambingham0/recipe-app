@@ -70,7 +70,7 @@ router.put(
         }
      }
   */
-  /* #swagger.responses[200] = { description: 'Updated recipe', schema: { $ref: '#/definitions/Recipe' } } */
+  /* #swagger.responses[204] = { description: 'No Content - recipe updated successfully' } */
   /* #swagger.responses[400] = { description: 'Invalid ID or body', schema: { $ref: '#/definitions/ErrorResponse' } } */
   /* #swagger.responses[404] = { description: 'Not found', schema: { $ref: '#/definitions/ErrorResponse' } } */
   /* #swagger.responses[500] = { description: 'Server error', schema: { $ref: '#/definitions/ErrorResponse' } } */
