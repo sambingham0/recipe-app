@@ -19,10 +19,24 @@
     {
       "name": "Recipes",
       "description": "Recipe CRUD operations"
+    },
+    {
+      "name": "Auth",
+      "description": "Authentication endpoints"
     }
   ],
   "paths": {
     "/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/recipes/": {
       "get": {
         "tags": [
           "Recipes"
@@ -81,13 +95,6 @@
         "summary": "Create a new recipe",
         "description": "",
         "parameters": [
-          {
-            "name": "safeParse(req",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "body",
             "in": "body",
@@ -156,7 +163,7 @@
         }
       }
     },
-    "/{id}": {
+    "/recipes/{id}": {
       "get": {
         "tags": [
           "Recipes"
@@ -172,13 +179,6 @@
               "type": "string"
             },
             "description": "Recipe ID"
-          },
-          {
-            "name": "safeParse(req",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -259,13 +259,6 @@
               "type": "string"
             },
             "description": "Recipe ID"
-          },
-          {
-            "name": "safeParse(req",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           },
           {
             "name": "body",
@@ -352,13 +345,6 @@
               "type": "string"
             },
             "description": "Recipe ID"
-          },
-          {
-            "name": "safeParse(req",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -422,24 +408,10 @@
               }
             }
           }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "safeParse(req": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
         }
       }
     },
-    "/google": {
+    "/auth/google": {
       "get": {
         "description": "",
         "responses": {
@@ -449,7 +421,7 @@
         }
       }
     },
-    "/google/callback": {
+    "/auth/google/callback": {
       "get": {
         "description": "",
         "responses": {
@@ -459,7 +431,7 @@
         }
       }
     },
-    "/google/failure": {
+    "/auth/google/failure": {
       "get": {
         "description": "",
         "responses": {
@@ -469,7 +441,7 @@
         }
       }
     },
-    "/logout": {
+    "/auth/logout": {
       "post": {
         "description": "",
         "responses": {
@@ -481,6 +453,14 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid",
+        "description": "Session cookie for authenticated requests"
+      }
+    },
     "schemas": {
       "RecipeInput": {
         "type": "object",
@@ -594,7 +574,7 @@
                 "properties": {
                   "type": {
                     "type": "string",
-                    "example": "number"
+                    "example": "integer"
                   },
                   "example": {
                     "type": "number",
@@ -607,7 +587,7 @@
                 "properties": {
                   "type": {
                     "type": "string",
-                    "example": "number"
+                    "example": "integer"
                   },
                   "example": {
                     "type": "number",
@@ -757,7 +737,7 @@
                 "properties": {
                   "type": {
                     "type": "string",
-                    "example": "number"
+                    "example": "integer"
                   },
                   "example": {
                     "type": "number",
@@ -770,7 +750,7 @@
                 "properties": {
                   "type": {
                     "type": "string",
-                    "example": "number"
+                    "example": "integer"
                   },
                   "example": {
                     "type": "number",
@@ -822,6 +802,10 @@
                     "type": "string",
                     "example": "string"
                   },
+                  "format": {
+                    "type": "string",
+                    "example": "date-time"
+                  },
                   "example": {
                     "type": "string",
                     "example": "2025-10-18T12:34:56.789Z"
@@ -845,16 +829,56 @@
           "properties": {
             "type": "object",
             "properties": {
-              "message": {
+              "error": {
                 "type": "object",
                 "properties": {
                   "type": {
                     "type": "string",
-                    "example": "string"
+                    "example": "object"
                   },
-                  "example": {
-                    "type": "string",
-                    "example": "Error message"
+                  "properties": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "example": "string"
+                          },
+                          "example": {
+                            "type": "string",
+                            "example": "Error message"
+                          }
+                        }
+                      },
+                      "code": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "example": "string"
+                          },
+                          "example": {
+                            "type": "string",
+                            "example": "RECIPE_NOT_FOUND"
+                          }
+                        }
+                      },
+                      "details": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "example": "object"
+                          },
+                          "nullable": {
+                            "type": "boolean",
+                            "example": true
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -894,14 +918,6 @@
         "xml": {
           "name": "DeleteResponse"
         }
-      }
-    },
-    "securitySchemes": {
-      "cookieAuth": {
-        "type": "apiKey",
-        "in": "cookie",
-        "name": "connect.sid",
-        "description": "Session cookie for authenticated requests (replace with bearer/OAuth2 if applicable)"
       }
     }
   }
