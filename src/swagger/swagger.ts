@@ -39,7 +39,7 @@ const doc = {
       }
     }
   },
-  // OpenAPI components (schemas)
+
   components: {
     schemas: {
       RecipeInput: {
@@ -78,43 +78,20 @@ const doc = {
         type: 'object',
         properties: { message: { type: 'string', example: 'Recipe deleted successfully' } }
       }
+    },
+    securitySchemes: {
+      cookieAuth: {
+        type: 'apiKey',
+        in: 'cookie',
+        name: 'connect.sid',
+        description: 'Session cookie for authenticated requests (replace with bearer/OAuth2 if applicable)'
+      }
     }
   },
-  definitions: {
-    // Request body schema for creating/updating a recipe
-    RecipeInput: {
-      title: 'Chocolate Cake',
-      description: 'Rich and moist',
-      ingredients: ['2 cups flour', '1 cup sugar', '1 cup cocoa powder'],
-      instructions: ['Mix ingredients', 'Bake 30 minutes'],
-      prepTime: 15,
-      cookTime: 30,
-      difficulty: 'Medium'
-    },
-    // Response schema (includes server-generated fields)
-    Recipe: {
-      _id: '67128f0f9f1b146b61a2c001',
-      title: 'Chocolate Cake',
-      description: 'Rich and moist',
-      ingredients: ['2 cups flour', '1 cup sugar', '1 cup cocoa powder'],
-      instructions: ['Mix ingredients', 'Bake 30 minutes'],
-      prepTime: 15,
-      cookTime: 30,
-      difficulty: 'Medium',
-      createdBy: '67128f0f9f1b146b61a2cabc',
-      createdAt: '2025-10-18T12:34:56.789Z'
-    },
-    ErrorResponse: {
-      message: 'Error message'
-    },
-    DeleteResponse: {
-      message: 'Recipe deleted successfully'
-    }
-  }
 };
 
 const outputFile = './src/swagger/swagger.json';
-const endpointsFiles = ['./src/app.ts'];
+const endpointsFiles = ['./src/routes/recipeRoutes.ts', './src/routes/authRoutes.ts'];
 
 swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
   console.log('Swagger documentation generated!');

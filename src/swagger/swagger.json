@@ -24,16 +24,6 @@
   "paths": {
     "/": {
       "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/recipes/": {
-      "get": {
         "tags": [
           "Recipes"
         ],
@@ -92,7 +82,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "parse(req",
+            "name": "safeParse(req",
             "in": "query",
             "schema": {
               "type": "string"
@@ -166,7 +156,7 @@
         }
       }
     },
-    "/recipes/{id}": {
+    "/{id}": {
       "get": {
         "tags": [
           "Recipes"
@@ -184,7 +174,7 @@
             "description": "Recipe ID"
           },
           {
-            "name": "parse(req",
+            "name": "safeParse(req",
             "in": "query",
             "schema": {
               "type": "string"
@@ -271,7 +261,7 @@
             "description": "Recipe ID"
           },
           {
-            "name": "parse(req",
+            "name": "safeParse(req",
             "in": "query",
             "schema": {
               "type": "string"
@@ -364,7 +354,7 @@
             "description": "Recipe ID"
           },
           {
-            "name": "parse(req",
+            "name": "safeParse(req",
             "in": "query",
             "schema": {
               "type": "string"
@@ -439,12 +429,52 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "parse(req": {
+                  "safeParse(req": {
                     "example": "any"
                   }
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/google": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/google/callback": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/google/failure": {
+      "get": {
+        "description": "",
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -455,46 +485,161 @@
       "RecipeInput": {
         "type": "object",
         "properties": {
-          "title": {
+          "type": {
             "type": "string",
-            "example": "Chocolate Cake"
+            "example": "object"
           },
-          "description": {
-            "type": "string",
-            "example": "Rich and moist"
-          },
-          "ingredients": {
+          "required": {
             "type": "array",
             "example": [
-              "2 cups flour",
-              "1 cup sugar",
-              "1 cup cocoa powder"
+              "title",
+              "ingredients",
+              "instructions",
+              "prepTime",
+              "cookTime",
+              "difficulty"
             ],
             "items": {
               "type": "string"
             }
           },
-          "instructions": {
-            "type": "array",
-            "example": [
-              "Mix ingredients",
-              "Bake 30 minutes"
-            ],
-            "items": {
-              "type": "string"
+          "properties": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "Chocolate Cake"
+                  }
+                }
+              },
+              "description": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "Rich and moist"
+                  }
+                }
+              },
+              "ingredients": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "array"
+                  },
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "string"
+                      }
+                    }
+                  },
+                  "example": {
+                    "type": "array",
+                    "example": [
+                      "2 cups flour",
+                      "1 cup sugar",
+                      "1 cup cocoa powder"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "instructions": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "array"
+                  },
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "string"
+                      }
+                    }
+                  },
+                  "example": {
+                    "type": "array",
+                    "example": [
+                      "Mix ingredients",
+                      "Bake 30 minutes"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "prepTime": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "number"
+                  },
+                  "example": {
+                    "type": "number",
+                    "example": 15
+                  }
+                }
+              },
+              "cookTime": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "number"
+                  },
+                  "example": {
+                    "type": "number",
+                    "example": 30
+                  }
+                }
+              },
+              "difficulty": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "enum": {
+                    "type": "array",
+                    "example": [
+                      "Easy",
+                      "Medium",
+                      "Hard"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "Medium"
+                  }
+                }
+              }
             }
-          },
-          "prepTime": {
-            "type": "number",
-            "example": 15
-          },
-          "cookTime": {
-            "type": "number",
-            "example": 30
-          },
-          "difficulty": {
-            "type": "string",
-            "example": "Medium"
           }
         },
         "xml": {
@@ -504,58 +649,186 @@
       "Recipe": {
         "type": "object",
         "properties": {
-          "_id": {
+          "type": {
             "type": "string",
-            "example": "67128f0f9f1b146b61a2c001"
+            "example": "object"
           },
-          "title": {
-            "type": "string",
-            "example": "Chocolate Cake"
-          },
-          "description": {
-            "type": "string",
-            "example": "Rich and moist"
-          },
-          "ingredients": {
-            "type": "array",
-            "example": [
-              "2 cups flour",
-              "1 cup sugar",
-              "1 cup cocoa powder"
-            ],
-            "items": {
-              "type": "string"
+          "properties": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "67128f0f9f1b146b61a2c001"
+                  }
+                }
+              },
+              "title": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "Chocolate Cake"
+                  }
+                }
+              },
+              "description": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "Rich and moist"
+                  }
+                }
+              },
+              "ingredients": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "array"
+                  },
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "string"
+                      }
+                    }
+                  },
+                  "example": {
+                    "type": "array",
+                    "example": [
+                      "2 cups flour",
+                      "1 cup sugar",
+                      "1 cup cocoa powder"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "instructions": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "array"
+                  },
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "string"
+                      }
+                    }
+                  },
+                  "example": {
+                    "type": "array",
+                    "example": [
+                      "Mix ingredients",
+                      "Bake 30 minutes"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "prepTime": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "number"
+                  },
+                  "example": {
+                    "type": "number",
+                    "example": 15
+                  }
+                }
+              },
+              "cookTime": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "number"
+                  },
+                  "example": {
+                    "type": "number",
+                    "example": 30
+                  }
+                }
+              },
+              "difficulty": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "enum": {
+                    "type": "array",
+                    "example": [
+                      "Easy",
+                      "Medium",
+                      "Hard"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "Medium"
+                  }
+                }
+              },
+              "createdBy": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "67128f0f9f1b146b61a2cabc"
+                  }
+                }
+              },
+              "createdAt": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "2025-10-18T12:34:56.789Z"
+                  }
+                }
+              }
             }
-          },
-          "instructions": {
-            "type": "array",
-            "example": [
-              "Mix ingredients",
-              "Bake 30 minutes"
-            ],
-            "items": {
-              "type": "string"
-            }
-          },
-          "prepTime": {
-            "type": "number",
-            "example": 15
-          },
-          "cookTime": {
-            "type": "number",
-            "example": 30
-          },
-          "difficulty": {
-            "type": "string",
-            "example": "Medium"
-          },
-          "createdBy": {
-            "type": "string",
-            "example": "67128f0f9f1b146b61a2cabc"
-          },
-          "createdAt": {
-            "type": "string",
-            "example": "2025-10-18T12:34:56.789Z"
           }
         },
         "xml": {
@@ -565,9 +838,27 @@
       "ErrorResponse": {
         "type": "object",
         "properties": {
-          "message": {
+          "type": {
             "type": "string",
-            "example": "Error message"
+            "example": "object"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "Error message"
+                  }
+                }
+              }
+            }
           }
         },
         "xml": {
@@ -577,14 +868,40 @@
       "DeleteResponse": {
         "type": "object",
         "properties": {
-          "message": {
+          "type": {
             "type": "string",
-            "example": "Recipe deleted successfully"
+            "example": "object"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "Recipe deleted successfully"
+                  }
+                }
+              }
+            }
           }
         },
         "xml": {
           "name": "DeleteResponse"
         }
+      }
+    },
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid",
+        "description": "Session cookie for authenticated requests (replace with bearer/OAuth2 if applicable)"
       }
     }
   }

@@ -12,13 +12,20 @@ export function validate(schemas: Schemas) {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
       if (schemas.params) {
-        schemas.params.parse(req.params);
+        const parsed = schemas.params.safeParse(req.params);
+        if (!parsed.success) throw parsed.error;
+        // assign back if needed
+        req.params = parsed.data as any;
       }
       if (schemas.query) {
-        schemas.query.parse(req.query);
+        const parsed = schemas.query.safeParse(req.query);
+        if (!parsed.success) throw parsed.error;
+        req.query = parsed.data as any;
       }
       if (schemas.body) {
-        req.body = schemas.body.parse(req.body);
+        const parsed = schemas.body.safeParse(req.body);
+        if (!parsed.success) throw parsed.error;
+        req.body = parsed.data;
       }
       return next();
     } catch (err) {
