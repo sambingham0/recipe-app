@@ -1,6 +1,8 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import session from 'express-session';
+import passport from 'passport';
+import './config/passport';
 import recipeRoutes from './routes/recipeRoutes';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
@@ -20,12 +22,17 @@ app.use(session({
   saveUninitialized: false
 }));
 
+// Passport init (after session)
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Swagger Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 
 // Routes
 app.use('/recipes', recipeRoutes);
+app.use('/auth', require('./routes/authRoutes').default);
 
 
 //default placeholder

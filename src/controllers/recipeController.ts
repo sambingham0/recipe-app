@@ -29,6 +29,10 @@ export const createRecipe = async (req: Request, res: Response, next: NextFuncti
   try {
     const { title, description, ingredients, instructions, prepTime, cookTime, difficulty } = req.body;
 
+    // req.user is populated by Passport after authentication
+    const user = req.user as any;
+    if (!user) throw new AppError(401, 'Authentication required', 'AUTH_REQUIRED');
+
     const recipe = await Recipe.create({
       title,
       description,
@@ -37,7 +41,7 @@ export const createRecipe = async (req: Request, res: Response, next: NextFuncti
       prepTime,
       cookTime,
       difficulty,
-      createdBy: null, // no auth yet
+      createdBy: user._id,
     });
 
     res.status(201).json(recipe);
@@ -52,14 +56,25 @@ export const updateRecipe = async (req: Request, res: Response, next: NextFuncti
     const { id } = req.params;
     const { title, description, ingredients, instructions, prepTime, cookTime, difficulty } = req.body;
 
-    const updatedRecipe = await Recipe.findByIdAndUpdate(
-      id,
-      { title, description, ingredients, instructions, prepTime, cookTime, difficulty },
-      { new: true, runValidators: true }
-    );
+    const recipe = await Recipe.findById(id);
+    if (!recipe) throw new AppError(404, 'Recipe not found', 'RECIPE_NOT_FOUND');
 
-    if (!updatedRecipe) throw new AppError(404, 'Recipe not found', 'RECIPE_NOT_FOUND');
+    // Only the creator can update
+    const user = req.user as any;
+    if (!user) throw new AppError(401, 'Authentication required', 'AUTH_REQUIRED');
+    if (!recipe.createdBy || recipe.createdBy.toString() !== user._id.toString()) {
+      throw new AppError(403, 'Forbidden - not the owner', 'FORBIDDEN');
+    }
 
+    recipe.title = title;
+    recipe.description = description;
+    recipe.ingredients = ingredients;
+    recipe.instructions = instructions;
+    recipe.prepTime = prepTime;
+    recipe.cookTime = cookTime;
+    recipe.difficulty = difficulty as any;
+
+    await recipe.save();
     res.status(204).send();
   } catch (err) {
     next(err);
@@ -70,8 +85,16 @@ export const updateRecipe = async (req: Request, res: Response, next: NextFuncti
 export const deleteRecipe = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
-    const deletedRecipe = await Recipe.findByIdAndDelete(id);
-    if (!deletedRecipe) throw new AppError(404, 'Recipe not found', 'RECIPE_NOT_FOUND');
+    const recipe = await Recipe.findById(id);
+    if (!recipe) throw new AppError(404, 'Recipe not found', 'RECIPE_NOT_FOUND');
+
+    const user = req.user as any;
+    if (!user) throw new AppError(401, 'Authentication required', 'AUTH_REQUIRED');
+    if (!recipe.createdBy || recipe.createdBy.toString() !== user._id.toString()) {
+      throw new AppError(403, 'Forbidden - not the owner', 'FORBIDDEN');
+    }
+
+    await recipe.deleteOne();
     res.json({ message: 'Recipe deleted successfully' });
   } catch (err) {
     next(err);

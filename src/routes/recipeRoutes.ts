@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { ensureAuth } from '../middleware/auth';
 import { validate } from '../middleware/validate';
 import { recipeBodySchema, recipeIdParamSchema, recipeUpdateBodySchema } from '../validation/recipeSchemas';
 import {
@@ -35,6 +36,7 @@ router.get(
 
 router.post(
   '/',
+  ensureAuth,
   validate({ body: recipeBodySchema }),
   /* #swagger.tags = ['Recipes'] */
   /* #swagger.summary = 'Create a new recipe' */
@@ -56,6 +58,7 @@ router.post(
 
 router.put(
   '/:id',
+  ensureAuth,
   validate({ params: recipeIdParamSchema, body: recipeUpdateBodySchema }),
   /* #swagger.tags = ['Recipes'] */
   /* #swagger.summary = 'Update a recipe by ID' */
@@ -79,6 +82,7 @@ router.put(
 
 router.delete(
   '/:id',
+  ensureAuth,
   validate({ params: recipeIdParamSchema }),
   /* #swagger.tags = ['Recipes'] */
   /* #swagger.summary = 'Delete a recipe by ID' */
