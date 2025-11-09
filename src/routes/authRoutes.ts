@@ -14,9 +14,8 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', { failureRedirect: '/auth/google/failure' }),
-  (req: Request, res: Response) => {
-    // Successful authentication — redirect or send JSON
-    res.json({ message: 'Authentication successful', user: req.user });
+  (req, res) => {
+    res.redirect('/api-docs');
   }
 );
 
